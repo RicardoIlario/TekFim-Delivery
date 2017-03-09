@@ -1,0 +1,19 @@
+{
+  "name": "dsc",
+  "version": "1.0.0",
+  "description": "=",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon dist/servers.js",
+    "build": "babel src -d dist --presets es2015",
+    "watch": "babel src -w -d dist --presets es2015"
+  },
+  "author": "sergior",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "jsonwebtoken": "^7.3.0",
+    "sequelize": "^3.30.2",
+    "sqlite3": "^3.1.8"
+  }
+}
