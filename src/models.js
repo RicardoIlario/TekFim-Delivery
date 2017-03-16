@@ -6,10 +6,10 @@ let sequelize = new Sequelize('users_db', null, null, {
   storage: './data.sqlite'
 });
 
-export let Users = sequelize.define('user', {
+export let User = sequelize.define('user', {
   login: Sequelize.STRING,
   password: Sequelize.STRING,
   email: Sequelize.STRING
 });
 
-Users.sync();
+User.sync();

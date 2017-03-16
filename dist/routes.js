@@ -23,7 +23,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var router = _express2.default.Router();
 
 router.route('/users').get(function (req, res) {
-  _models.Users.findAll().then(function (users) {
+  _models.User.findAll().then(function (users) {
     res.send(users);
   });
 }).post(function (req, res) {
@@ -32,15 +32,15 @@ router.route('/users').get(function (req, res) {
   var email = req.body.email;
 
   _bcrypt2.default.hash(req.body.password, 12).then(function (result) {
-    User.create({ login: login, password: result,
+    _models.User.create({ login: login, password: result,
       email: email }).then(function (user) {
       res.json({ message: 'User added' });
     });
   });
 });
 
-router.route('/auth').post(function (req, res) {
-  User.findOne({ where: { login: req.body.login } }).then(function (user) {
+router.route('/auth').get(function (req, res) {
+  _models.User.findOne({ where: { login: req.body.login } }).then(function (user) {
     if (user) {
       _bcrypt2.default.compare(req.body.password, user.password).then(function (result) {
         if (result) {
@@ -58,7 +58,6 @@ router.route('/auth').post(function (req, res) {
 
 router.route('/profile').get(function (req, res) {
   var token = req.headers['x-access-token'];
-
   if (token) {
     _jsonwebtoken2.default.verify(token, secret, function (err, decoded) {
       res.json(decoded);

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Users = undefined;
+exports.User = undefined;
 
 var _sequelize = require('sequelize');
 
@@ -17,10 +17,10 @@ var sequelize = new _sequelize2.default('users_db', null, null, {
   storage: './data.sqlite'
 });
 
-var Users = exports.Users = sequelize.define('user', {
+var User = exports.User = sequelize.define('user', {
   login: _sequelize2.default.STRING,
   password: _sequelize2.default.STRING,
   email: _sequelize2.default.STRING
 });
 
-Users.sync();
+User.sync();
