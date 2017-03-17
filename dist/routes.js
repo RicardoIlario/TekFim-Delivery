@@ -39,6 +39,32 @@ router.route('/users').get(function (req, res) {
   });
 });
 
+router.route('/users/:login').get(function (req, res) {
+  _models.User.findOne({
+    where: { login: req.params.login }
+  }).then(function (user) {
+    if (user) {
+      res.json(user);
+    } else {
+      res.json({ error: 'User not found!' });
+    }
+  });
+}).put(function (req, res) {
+  _models.User.findById(req.params.login).then(function (user) {
+    if (user) {
+      user.update({ login: req.body.login }).then(function (user) {
+        _bcrypt2.default.compare(req.body.password, user.password).then(function (result) {
+          if (result) {
+            res.json(user);
+          }
+        });
+      });
+    } else {
+      res.json({ error: 'User not found!' });
+    }
+  });
+});
+
 router.route('/auth').get(function (req, res) {
   _models.User.findOne({ where: { login: req.body.login } }).then(function (user) {
     if (user) {

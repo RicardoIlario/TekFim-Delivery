@@ -24,6 +24,35 @@ router.route('/users')
     })
   });
 
+router.route('/users/:login')
+  .get((req, res) => {
+    User.findOne({
+      where: {login: req.params.login}
+    }).then((user) => {
+      if (user) {
+        res.json(user);
+      } else {
+        res.json({error: 'User not found!'});
+      }
+    })
+  })
+
+  .put((req, res) => {
+    User.findById(req.params.login).then((user) => {
+      if (user) {
+        user.update({login: req.body.login}).then((user) => {
+          bcrypt.compare(req.body.password, user.password).then((result) => {
+            if (result) {
+              res.json(user);
+            }
+          })
+        })
+      } else {
+        res.json({error: 'User not found!'});
+      }
+    })
+  })
+
 router.route('/auth')
   .get((req, res) => {
     User.findOne({where: {login: req.body.login}}).then((user) => {
