@@ -65,6 +65,20 @@ router.route('/users/:login').get(function (req, res) {
   });
 });
 
+router.route('/users/:login').delete(function (req, res) {
+  _models.User.findOne({
+    where: { login: req.params.login }
+  }).then(function (user) {
+    if (user) {
+      user.destroy().then(function (user) {
+        res.json(user);
+      });
+    } else {
+      res.json({ error: 'User not found!' });
+    }
+  });
+});
+
 router.route('/auth').get(function (req, res) {
   _models.User.findOne({ where: { login: req.body.login } }).then(function (user) {
     if (user) {
