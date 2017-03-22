@@ -21,6 +21,7 @@ var _models = require('./models');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
+var secret = 'something';
 
 router.route('/users').get(function (req, res) {
   _models.User.findAll().then(function (users) {
@@ -63,9 +64,7 @@ router.route('/users/:login').get(function (req, res) {
       res.json({ error: 'User not found!' });
     }
   });
-});
-
-router.route('/users/:login').delete(function (req, res) {
+}).delete(function (req, res) {
   _models.User.findOne({
     where: { login: req.params.login }
   }).then(function (user) {
@@ -79,13 +78,13 @@ router.route('/users/:login').delete(function (req, res) {
   });
 });
 
-router.route('/auth').get(function (req, res) {
+router.route('/auth').post(function (req, res) {
   _models.User.findOne({ where: { login: req.body.login } }).then(function (user) {
     if (user) {
       _bcrypt2.default.compare(req.body.password, user.password).then(function (result) {
         if (result) {
           var token = _jsonwebtoken2.default.sign(user.get({ plain: true }), secret);
-          res.json({ message: 'User authenticated' });
+          res.json({ message: 'User authenticated', token: token });
         } else {
           res.json({ message: 'Wrong password' });
         }

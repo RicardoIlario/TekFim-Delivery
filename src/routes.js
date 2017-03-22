@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import {User} from './models';
 
 let router = express.Router();
+let secret = 'something';
 
 router.route('/users')
   .get((req, res) => {
@@ -53,29 +54,30 @@ router.route('/users/:login')
     })
   })
 
-  router.route('/users/:login')
-      .delete((req, res) => {
-        User.findOne({
-          where: {login: req.params.login}
-        }).then((user) => {
-          if (user) {
-            user.destroy().then((user) => {
-              res.json(user);
-            })
-          } else {
-            res.json({error: 'User not found!'});
-          }
+  .delete((req, res) => {
+    User.findOne({
+      where: {login: req.params.login}
+    }).then((user) => {
+      if (user) {
+        user.destroy().then((user) => {
+          res.json(user);
         })
-      })
+      } else {
+          res.json({error: 'User not found!'});
+      }
+    })
+  })
 
 router.route('/auth')
-  .get((req, res) => {
-    User.findOne({where: {login: req.body.login}}).then((user) => {
+  .post((req, res) => {
+    User.findOne({
+      where: {login: req.body.login}
+    }).then((user) => {
       if (user) {
         bcrypt.compare(req.body.password, user.password).then((result) => {
           if (result) {
             const token = jwt.sign(user.get({plain: true}), secret);
-            res.json({message: 'User authenticated'});
+            res.json({message: 'User authenticated', token: token});
           } else {
             res.json({message: 'Wrong password'});
           }
@@ -86,16 +88,16 @@ router.route('/auth')
     });
   });
 
-  router.route('/profile')
-    .get((req, res) => {
-      const token = req.headers['x-access-token'];
-      if (token) {
-        jwt.verify(token, secret, (err, decoded) => {
-          res.json(decoded);
-        });
-      } else {
-        res.json({message: 'Token not found'});
-      }
-    });
+router.route('/profile')
+  .get((req, res) => {
+    const token = req.headers['x-access-token'];
+    if (token) {
+      jwt.verify(token, secret, (err, decoded) => {
+        res.json(decoded);
+      });
+    } else {
+      res.json({message: 'Token not found'});
+    }
+  });
 
 export default router;
