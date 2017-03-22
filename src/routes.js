@@ -53,6 +53,21 @@ router.route('/users/:login')
     })
   })
 
+  router.route('/users/:login')
+      .delete((req, res) => {
+        User.findOne({
+          where: {login: req.params.login}
+        }).then((user) => {
+          if (user) {
+            user.destroy().then((user) => {
+              res.json(user);
+            })
+          } else {
+            res.json({error: 'User not found!'});
+          }
+        })
+      })
+
 router.route('/auth')
   .get((req, res) => {
     User.findOne({where: {login: req.body.login}}).then((user) => {
