@@ -38,21 +38,24 @@ router.route('/users/:login')
     })
   })
 
+ router.route('/users/:login')
   .put((req, res) => {
-    User.findById(req.params.login).then((user) => {
-      if (user) {
-        user.update({login: req.body.login}).then((user) => {
-          bcrypt.compare(req.body.password, user.password).then((result) => {
-            if (result) {
-              res.json(user);
-            }
-          })
-        })
-      } else {
-        res.json({error: 'User not found!'});
-      }
+    let login = req.body.login;
+    let password = req.body.password;
+    let email = req.body.email;
+    let data = {login: login, password: password, email: email}
+     User.findOne({
+      where: {login: req.params.login}
+     }).then((user) => {
+        if (user) {
+          User.update(data, {where: {login: req.params.login}}).then(() => {
+              res.json({sucess: 'User Updated!'});
+            })
+        } else {
+          res.json({error: 'User not found!'});
+        }
+      })
     })
-  })
 
   .delete((req, res) => {
     User.findOne({

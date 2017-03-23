@@ -50,15 +50,19 @@ router.route('/users/:login').get(function (req, res) {
       res.json({ error: 'User not found!' });
     }
   });
-}).put(function (req, res) {
-  _models.User.findById(req.params.login).then(function (user) {
+});
+
+router.route('/users/:login').put(function (req, res) {
+  var login = req.body.login;
+  var password = req.body.password;
+  var email = req.body.email;
+  var data = { login: login, password: password, email: email };
+  _models.User.findOne({
+    where: { login: req.params.login }
+  }).then(function (user) {
     if (user) {
-      user.update({ login: req.body.login }).then(function (user) {
-        _bcrypt2.default.compare(req.body.password, user.password).then(function (result) {
-          if (result) {
-            res.json(user);
-          }
-        });
+      _models.User.update(data, { where: { login: req.params.login } }).then(function () {
+        res.json({ sucess: 'User Updated!' });
       });
     } else {
       res.json({ error: 'User not found!' });
@@ -79,7 +83,9 @@ router.route('/users/:login').get(function (req, res) {
 });
 
 router.route('/auth').post(function (req, res) {
-  _models.User.findOne({ where: { login: req.body.login } }).then(function (user) {
+  _models.User.findOne({
+    where: { login: req.body.login }
+  }).then(function (user) {
     if (user) {
       _bcrypt2.default.compare(req.body.password, user.password).then(function (result) {
         if (result) {
