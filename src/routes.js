@@ -12,16 +12,25 @@ router.route('/users')
       res.send(users);
     })
   })
+
   .post((req, res) => {
     let login = req.body.login;
     let password = req.body.password;
     let email = req.body.email;
 
-    bcrypt.hash(req.body.password, 12).then((result) => {
-      User.create({login: login, password: result,
-        email: email}).then((user) => {
-          res.json({message: 'User added'});
+    User.findOne({
+      where: {login: login}
+    }).then((result) => {
+      if (result) {
+        res.json({message: 'User already exists'});
+      } else {
+        bcrypt.hash(req.body.password, 12).then((result) => {
+          User.create({login: login, password: result,
+            email: email}).then((user) => {
+              res.json({message: 'User added'});
+            })
         })
+      }
     })
   });
 
@@ -38,7 +47,6 @@ router.route('/users/:login')
     })
   })
 
- router.route('/users/:login')
   .put((req, res) => {
     let login = req.body.login;
     let password = req.body.password;
