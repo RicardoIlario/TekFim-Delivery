@@ -32,11 +32,19 @@ router.route('/users').get(function (req, res) {
   var password = req.body.password;
   var email = req.body.email;
 
-  _bcrypt2.default.hash(req.body.password, 12).then(function (result) {
-    _models.User.create({ login: login, password: result,
-      email: email }).then(function (user) {
-      res.json({ message: 'User added' });
-    });
+  _models.User.findOne({
+    where: { login: login }
+  }).then(function (result) {
+    if (result) {
+      res.json({ message: 'User already exists' });
+    } else {
+      _bcrypt2.default.hash(req.body.password, 12).then(function (result) {
+        _models.User.create({ login: login, password: result,
+          email: email }).then(function (user) {
+          res.json({ message: 'User added' });
+        });
+      });
+    }
   });
 });
 
@@ -50,9 +58,7 @@ router.route('/users/:login').get(function (req, res) {
       res.json({ error: 'User not found!' });
     }
   });
-});
-
-router.route('/users/:login').put(function (req, res) {
+}).put(function (req, res) {
   var login = req.body.login;
   var password = req.body.password;
   var email = req.body.email;
