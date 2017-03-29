@@ -9,15 +9,19 @@ let sequelize = new Sequelize('tekfin_db', null, null, {
 export let User = sequelize.define('user', {
   login: Sequelize.STRING,
   password: Sequelize.STRING,
-  email: Sequelize.STRING
+  email: Sequelize.STRING,
 });
 
 export let Cardapio = sequelize.define('cardapio', {
-  prato: Sequelize.STRING, 
+  prato: Sequelize.STRING,
   descricao: Sequelize.STRING,
   preco: Sequelize.DOUBLE
-}) 
+})
 
+export let Item = sequelize.define('item', {
+  descricao: Sequelize.STRING,
+  preco: Sequelize.DOUBLE
+})
 export let Pedido = sequelize.define('pedido', {
   prato: Sequelize.STRING,
   quantPrato: Sequelize.STRING,
@@ -27,6 +31,7 @@ export let Pedido = sequelize.define('pedido', {
   quantSobremesa: Sequelize.STRING
 });
 
+Item.sync();
 Pedido.sync();
 User.sync();
 Cardapio.sync();

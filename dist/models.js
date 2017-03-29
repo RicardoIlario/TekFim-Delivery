@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Pedido = exports.Cardapio = exports.User = undefined;
+exports.Pedido = exports.Item = exports.Cardapio = exports.User = undefined;
 
 var _sequelize = require('sequelize');
 
@@ -29,6 +29,10 @@ var Cardapio = exports.Cardapio = sequelize.define('cardapio', {
   preco: _sequelize2.default.DOUBLE
 });
 
+var Item = exports.Item = sequelize.define('item', {
+  descricao: _sequelize2.default.STRING,
+  preco: _sequelize2.default.DOUBLE
+});
 var Pedido = exports.Pedido = sequelize.define('pedido', {
   prato: _sequelize2.default.STRING,
   quantPrato: _sequelize2.default.STRING,
@@ -38,6 +42,7 @@ var Pedido = exports.Pedido = sequelize.define('pedido', {
   quantSobremesa: _sequelize2.default.STRING
 });
 
+Item.sync();
 Pedido.sync();
 User.sync();
 Cardapio.sync();

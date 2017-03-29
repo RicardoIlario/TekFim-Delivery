@@ -62,6 +62,7 @@ router.route('/users/:login').get(function (req, res) {
   var login = req.body.login;
   var password = req.body.password;
   var email = req.body.email;
+
   var data = { login: login, password: password, email: email };
   _models.User.findOne({
     where: { login: req.params.login }
@@ -166,6 +167,60 @@ router.route('/cardapio/:prato_id').get(function (req, res) {
       });
     } else {
       res.json({ message: 'Prato não encontrado!' });
+    }
+  });
+});
+
+//ITEM
+router.route('/itens').get(function (req, res) {
+  _models.Item.findAll().then(function (itens) {
+    res.send(itens);
+  });
+}).post(function (req, res) {
+  var descricao = req.body.descricao;
+  var preco = req.body.preco;
+
+  _models.Item.create({ descricao: descricao, preco: preco }).then(function (item) {
+    res.json({ message: 'Request added' });
+  });
+});
+
+router.route('/item/:id').get(function (req, res) {
+  _models.Item.findById(req.params.id).then(function (item) {
+    if (item) {
+      res.json(item);
+    } else {
+      res.json({ error: 'Request not found' });
+    }
+  });
+});
+
+router.route('/item/:id').put(function (req, res) {
+  var descricao = req.body.descricao;
+  var preco = req.body.preco;
+  var fim = { descricao: descricao, preco: preco };
+
+  _models.Item.findOne({
+    where: { id: req.params.id }
+  }).then(function (item) {
+    if (item) {
+      _models.Item.update(fim, { where: { id: req.params.id } }).then(function () {
+        res.json({ sucess: 'Request Updated!' });
+      });
+    } else {
+      res.json({ error: 'Request not found!' });
+    }
+  });
+});
+
+router.route('/item/:id').delete(function (req, res) {
+  _models.Item.findById(req.params.id).then(function (item) {
+    if (item) {
+      item.destroy().then(function (item) {
+        res.json(item);
+      });
+    } else {
+      res.json({ error: 'Request not found!' });
     }
   });
 });
