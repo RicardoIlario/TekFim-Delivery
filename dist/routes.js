@@ -118,6 +118,8 @@ router.route('/profile').get(function (req, res) {
   }
 });
 
+//CARDAPIO
+
 router.route('/cardapio').get(function (req, res) {
   _models.Cardapio.findAll().then(function (cardapio) {
     res.json(cardapio);
@@ -164,6 +166,70 @@ router.route('/cardapio/:prato_id').get(function (req, res) {
       });
     } else {
       res.json({ message: 'Prato não encontrado!' });
+    }
+  });
+});
+
+//PEDIDOS
+
+router.route('/pedidos').get(function (req, res) {
+  _models.Pedido.findAll().then(function (pedidos) {
+    res.send(pedidos);
+  });
+}).post(function (req, res) {
+  var prato = req.body.prato;
+  var quantPrato = req.body.quantPrato;
+  var bebida = req.body.bebida;
+  var quantBebida = req.body.quantBebida;
+  var sobremesa = req.body.sobremesa;
+  var quantSobremesa = req.body.quantSobremesa;
+
+  _models.Pedido.create({ prato: prato, quantPrato: quantPrato,
+    bebida: bebida, quantBebida: quantBebida, sobremesa: sobremesa, quantSobremesa: quantSobremesa }).then(function (pedido) {
+    res.json({ message: 'Request added' });
+  });
+});
+
+router.route('/pedidos/:id').get(function (req, res) {
+  _models.Pedido.findById(req.params.id).then(function (pedido) {
+    if (pedido) {
+      res.json(pedido);
+    } else {
+      res.json({ error: 'Request not found' });
+    }
+  });
+});
+
+router.route('/pedidos/:id').put(function (req, res) {
+  var prato = req.body.prato;
+  var quantPrato = req.body.quantPrato;
+  var bebida = req.body.bebida;
+  var quantBebida = req.body.quantBebida;
+  var sobremesa = req.body.sobremesa;
+  var quantSobremesa = req.body.quantSobremesa;
+  var fim = { prato: prato, quantPrato: quantPrato, bebida: bebida, quantBebida: quantBebida, sobremesa: sobremesa, quantSobremesa: quantSobremesa };
+
+  _models.Pedido.findOne({
+    where: { id: req.params.id }
+  }).then(function (pedido) {
+    if (pedido) {
+      _models.Pedido.update(fim, { where: { id: req.params.id } }).then(function () {
+        res.json({ sucess: 'Request Updated!' });
+      });
+    } else {
+      res.json({ error: 'Request not found!' });
+    }
+  });
+});
+
+router.route('/pedidos/:id').delete(function (req, res) {
+  _models.Pedido.findById(req.params.id).then(function (pedido) {
+    if (pedido) {
+      pedido.destroy().then(function (pedido) {
+        res.json(pedido);
+      });
+    } else {
+      res.json({ error: 'Request not found!' });
     }
   });
 });

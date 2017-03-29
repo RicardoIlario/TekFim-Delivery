@@ -18,5 +18,15 @@ export let Cardapio = sequelize.define('cardapio', {
   preco: Sequelize.DOUBLE
 }) 
 
+export let Pedido = sequelize.define('pedido', {
+  prato: Sequelize.STRING,
+  quantPrato: Sequelize.STRING,
+  bebida: Sequelize.STRING,
+  quantBebida: Sequelize.STRING,
+  sobremesa: Sequelize.STRING,
+  quantSobremesa: Sequelize.STRING
+});
+
+Pedido.sync();
 User.sync();
 Cardapio.sync();

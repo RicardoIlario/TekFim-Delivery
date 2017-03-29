@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import {User, Cardapio} from './models';
+import {User, Cardapio, Pedido} from './models';
 
 let router = express.Router();
 let secret = 'something';
@@ -111,6 +111,8 @@ router.route('/profile')
     }
   });
 
+//CARDAPIO
+
 router.route('/cardapio')
   .get((req, res) => {
     Cardapio.findAll().then((cardapio) => {
@@ -169,4 +171,76 @@ router.route('/cardapio/:prato_id')
     })
   })
 
+//PEDIDOS
+
+router.route('/pedidos')
+  .get((req, res) => {
+     Pedido.findAll().then(function(pedidos) {
+      res.send(pedidos);
+    })
+
+  })
+
+  .post((req, res) => {
+    let prato = req.body.prato;
+    let quantPrato = req.body.quantPrato;
+    let bebida = req.body.bebida;
+    let quantBebida = req.body.quantBebida;
+    let sobremesa = req.body.sobremesa;
+    let quantSobremesa = req.body.quantSobremesa;
+
+    Pedido.create({prato: prato, quantPrato: quantPrato,
+            bebida: bebida, quantBebida: quantBebida, sobremesa: sobremesa, quantSobremesa: quantSobremesa}).then((pedido) => {
+              res.json({message:'Request added'});
+            });
+      });
+
+router.route('/pedidos/:id')
+  .get((req, res) => {
+    Pedido.findById(req.params.id).then(pedido => {
+      if (pedido) {
+        res.json(pedido);
+      } else {
+        res.json({error: 'Request not found'});
+      }
+  });
+});
+
+router.route('/pedidos/:id')
+  .put((req, res) => {
+    let prato = req.body.prato;
+    let quantPrato = req.body.quantPrato;
+    let bebida = req.body.bebida;
+    let quantBebida = req.body.quantBebida;
+    let sobremesa = req.body.sobremesa;
+    let quantSobremesa = req.body.quantSobremesa;
+    let fim = {prato: prato, quantPrato: quantPrato, bebida: bebida, quantBebida: quantBebida, sobremesa: sobremesa, quantSobremesa: quantSobremesa}
+     
+     Pedido.findOne({
+        where: {id: req.params.id}
+      }).then((pedido) => {
+        if (pedido) {
+          Pedido.update(fim, {where: {id: req.params.id}}).then(() => {
+              res.json({sucess: 'Request Updated!'});
+            })
+        } else {
+          res.json({error: 'Request not found!'});
+        }
+      });
+    });
+    
+router.route('/pedidos/:id')
+  .delete((req, res) => {
+    Pedido.findById(req.params.id).then(pedido => {
+      if (pedido) {
+        pedido.destroy().then((pedido) => {
+          res.json(pedido);
+        })
+      } else {
+          res.json({error: 'Request not found!'});
+      }
+    });
+  });
+
+  
   export default router;
