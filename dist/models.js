@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.User = undefined;
+exports.Cardapio = exports.User = undefined;
 
 var _sequelize = require('sequelize');
 
@@ -11,7 +11,7 @@ var _sequelize2 = _interopRequireDefault(_sequelize);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var sequelize = new _sequelize2.default('users_db', null, null, {
+var sequelize = new _sequelize2.default('tekfin_db', null, null, {
   host: 'localhost',
   dialect: 'sqlite',
   storage: './data.sqlite'
@@ -23,4 +23,11 @@ var User = exports.User = sequelize.define('user', {
   email: _sequelize2.default.STRING
 });
 
+var Cardapio = exports.Cardapio = sequelize.define('cardapio', {
+  prato: _sequelize2.default.STRING,
+  descricao: _sequelize2.default.STRING,
+  preco: _sequelize2.default.DOUBLE
+});
+
 User.sync();
+Cardapio.sync();

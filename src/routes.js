@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import {User} from './models';
+import {User, Cardapio} from './models';
 
 let router = express.Router();
 let secret = 'something';
@@ -111,4 +111,62 @@ router.route('/profile')
     }
   });
 
-export default router;
+router.route('/cardapio')
+  .get((req, res) => {
+    Cardapio.findAll().then((cardapio) => {
+      res.json(cardapio);
+    })
+  })
+
+  .post((req, res) => {
+    let prato = req.body.prato;
+    let descricao = req.body.descricao;
+    let preco = req.body.preco;
+
+    Cardapio.create({
+      prato: prato, descricao: descricao, preco: preco
+    }).then(() => {
+      res.json({message: 'Prato adicionado!'});
+    })
+  })
+
+router.route('/cardapio/:prato_id')
+  .get((req, res) => {
+    Cardapio.findById(req.params.prato_id).then((prato) => {
+      if (prato) {
+        res.json(prato);
+      } else {
+        res.json({message: 'Prato não encontrado!'})
+      }
+    })
+  })
+
+  .put((req, res) => {
+    let prato = req.body.prato;
+    let descricao = req.body.descricao;
+    let preco = req.body.preco;
+
+    Cardapio.findById(req.params.prato_id).then(prato => {
+      if (prato) {
+        prato.update({prato: prato, descricao: descricao, preco: preco}).then(() => {
+          res.json({message: 'Prato atualizado!'});
+        })
+      } else {
+        res.json({message: 'Prato não encontrado'});
+      }
+    })
+  })
+
+  .delete((req, res) => {
+    Cardapio.findById(req.params.prato_id).then((prato) => {
+      if (prato) {
+        prato.destroy().then(() => {
+          res.json({message: 'Prato apagado com sucesso!'});
+        });
+      } else {
+        res.json({message: 'Prato não encontrado!'});
+      }
+    })
+  })
+
+  export default router;

@@ -118,4 +118,54 @@ router.route('/profile').get(function (req, res) {
   }
 });
 
+router.route('/cardapio').get(function (req, res) {
+  _models.Cardapio.findAll().then(function (cardapio) {
+    res.json(cardapio);
+  });
+}).post(function (req, res) {
+  var prato = req.body.prato;
+  var descricao = req.body.descricao;
+  var preco = req.body.preco;
+
+  _models.Cardapio.create({
+    prato: prato, descricao: descricao, preco: preco
+  }).then(function () {
+    res.json({ message: 'Prato adicionado!' });
+  });
+});
+
+router.route('/cardapio/:prato_id').get(function (req, res) {
+  _models.Cardapio.findById(req.params.prato_id).then(function (prato) {
+    if (prato) {
+      res.json(prato);
+    } else {
+      res.json({ message: 'Prato não encontrado!' });
+    }
+  });
+}).put(function (req, res) {
+  var prato = req.body.prato;
+  var descricao = req.body.descricao;
+  var preco = req.body.preco;
+
+  _models.Cardapio.findById(req.params.prato_id).then(function (prato) {
+    if (prato) {
+      prato.update({ prato: prato, descricao: descricao, preco: preco }).then(function () {
+        res.json({ message: 'Prato atualizado!' });
+      });
+    } else {
+      res.json({ message: 'Prato não encontrado' });
+    }
+  });
+}).delete(function (req, res) {
+  _models.Cardapio.findById(req.params.prato_id).then(function (prato) {
+    if (prato) {
+      prato.destroy().then(function () {
+        res.json({ message: 'Prato apagado com sucesso!' });
+      });
+    } else {
+      res.json({ message: 'Prato não encontrado!' });
+    }
+  });
+});
+
 exports.default = router;
