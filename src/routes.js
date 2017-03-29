@@ -17,6 +17,7 @@ router.route('/users')
     let login = req.body.login;
     let password = req.body.password;
     let email = req.body.email;
+    let endereco = req.body.endereco;
 
     User.findOne({
       where: {login: login}
@@ -26,7 +27,7 @@ router.route('/users')
       } else {
         bcrypt.hash(req.body.password, 12).then((result) => {
           User.create({login: login, password: result,
-            email: email}).then((user) => {
+            email: email, endereco: endereco}).then((user) => {
               res.json({message: 'User added'});
             })
         })
@@ -51,8 +52,9 @@ router.route('/users/:login')
     let login = req.body.login;
     let password = req.body.password;
     let email = req.body.email;
+    let endereco = req.body.endereco;
 
-    let data = {login: login, password: password, email: email}
+    let data = {login: login, password: password, email: email, endereco: endereco}
      User.findOne({
       where: {login: req.params.login}
      }).then((user) => {
@@ -175,7 +177,7 @@ router.route('/cardapio/:prato_id')
 //ITEM
 router.route('/itens')
   .get((req, res) => {
-     Item.findAll().then(function(itens) {
+     Item.findAll().then((itens) => {
       res.send(itens);
     })
 
@@ -186,44 +188,39 @@ router.route('/itens')
     let preco = req.body.preco;
 
     Item.create({descricao: descricao, preco: preco}).then((item) => {
-              res.json({message:'Request added'});
-            });
-      });
+        res.json({message:'Request added'});
+    })
+  })
 
-router.route('/item/:id')
+router.route('/itens/:item_id')
   .get((req, res) => {
-    Item.findById(req.params.id).then(item => {
+    Item.findById(req.params.item_id).then(item => {
       if (item) {
         res.json(item);
       } else {
         res.json({error: 'Request not found'});
       }
-  });
-});
+    })
+  })
 
-router.route('/item/:id')
   .put((req, res) => {
     let descricao = req.body.descricao;
     let preco = req.body.preco;
     let fim = {descricao: descricao, preco: preco}
 
-    Item.findOne({
-       where: {id: req.params.id}
-     }).then((item) => {
+    Item.findById(req.params.item_id).then((item) => {
        if (item) {
-         Item.update(fim, {where: {id: req.params.id}}).then(() => {
+         Item.update(fim, {where: {id: req.params.item_id}}).then(() => {
              res.json({sucess: 'Request Updated!'});
            })
        } else {
          res.json({error: 'Request not found!'});
        }
-     });
-   });
+     })
+   })
 
-
-router.route('/item/:id')
   .delete((req, res) => {
-    Item.findById(req.params.id).then(item => {
+    Item.findById(req.params.item_id).then(item => {
       if (item) {
         item.destroy().then((item) => {
           res.json(item);
@@ -233,7 +230,6 @@ router.route('/item/:id')
       }
     });
   });
-
 
 //PEDIDOS
 
@@ -254,23 +250,22 @@ router.route('/pedidos')
     let quantSobremesa = req.body.quantSobremesa;
 
     Pedido.create({prato: prato, quantPrato: quantPrato,
-            bebida: bebida, quantBebida: quantBebida, sobremesa: sobremesa, quantSobremesa: quantSobremesa}).then((pedido) => {
+      bebida: bebida, quantBebida: quantBebida, sobremesa: sobremesa, quantSobremesa: quantSobremesa}).then((pedido) => {
               res.json({message:'Request added'});
-            });
-      });
+      })
+    })
 
-router.route('/pedidos/:id')
+router.route('/pedidos/:pedidos_id')
   .get((req, res) => {
-    Pedido.findById(req.params.id).then(pedido => {
+    Pedido.findById(req.params.pedidos_id).then(pedido => {
       if (pedido) {
         res.json(pedido);
       } else {
         res.json({error: 'Request not found'});
       }
-  });
-});
+    })
+  })
 
-router.route('/pedidos/:id')
   .put((req, res) => {
     let prato = req.body.prato;
     let quantPrato = req.body.quantPrato;
@@ -280,22 +275,19 @@ router.route('/pedidos/:id')
     let quantSobremesa = req.body.quantSobremesa;
     let fim = {prato: prato, quantPrato: quantPrato, bebida: bebida, quantBebida: quantBebida, sobremesa: sobremesa, quantSobremesa: quantSobremesa}
 
-     Pedido.findOne({
-        where: {id: req.params.id}
-      }).then((pedido) => {
+     Pedido.findById(req.params.pedidos_id).then((pedido) => {
         if (pedido) {
-          Pedido.update(fim, {where: {id: req.params.id}}).then(() => {
+          Pedido.update(fim, {where: {id: req.params.pedidos_id}}).then(() => {
               res.json({sucess: 'Request Updated!'});
             })
         } else {
           res.json({error: 'Request not found!'});
         }
-      });
-    });
+      })
+    })
 
-router.route('/pedidos/:id')
   .delete((req, res) => {
-    Pedido.findById(req.params.id).then(pedido => {
+    Pedido.findById(req.params.pedidos_id).then(pedido => {
       if (pedido) {
         pedido.destroy().then((pedido) => {
           res.json(pedido);
@@ -303,10 +295,7 @@ router.route('/pedidos/:id')
       } else {
           res.json({error: 'Request not found!'});
       }
-    });
-  });
+    })
+  })
 
-
-
-
-  export default router;
+export default router;

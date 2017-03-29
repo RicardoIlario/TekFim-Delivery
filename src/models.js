@@ -10,6 +10,7 @@ export let User = sequelize.define('user', {
   login: Sequelize.STRING,
   password: Sequelize.STRING,
   email: Sequelize.STRING,
+  endereco: Sequelize.STRING
 });
 
 export let Cardapio = sequelize.define('cardapio', {
@@ -22,13 +23,14 @@ export let Item = sequelize.define('item', {
   descricao: Sequelize.STRING,
   preco: Sequelize.DOUBLE
 })
+
 export let Pedido = sequelize.define('pedido', {
   prato: Sequelize.STRING,
-  quantPrato: Sequelize.STRING,
+  quantPrato: Sequelize.INTEGER,
   bebida: Sequelize.STRING,
-  quantBebida: Sequelize.STRING,
+  quantBebida: Sequelize.INTEGER,
   sobremesa: Sequelize.STRING,
-  quantSobremesa: Sequelize.STRING
+  quantSobremesa: Sequelize.INTEGER
 });
 
 Item.sync();

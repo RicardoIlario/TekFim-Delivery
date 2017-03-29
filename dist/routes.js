@@ -31,6 +31,7 @@ router.route('/users').get(function (req, res) {
   var login = req.body.login;
   var password = req.body.password;
   var email = req.body.email;
+  var endereco = req.body.endereco;
 
   _models.User.findOne({
     where: { login: login }
@@ -40,7 +41,7 @@ router.route('/users').get(function (req, res) {
     } else {
       _bcrypt2.default.hash(req.body.password, 12).then(function (result) {
         _models.User.create({ login: login, password: result,
-          email: email }).then(function (user) {
+          email: email, endereco: endereco }).then(function (user) {
           res.json({ message: 'User added' });
         });
       });
@@ -62,8 +63,9 @@ router.route('/users/:login').get(function (req, res) {
   var login = req.body.login;
   var password = req.body.password;
   var email = req.body.email;
+  var endereco = req.body.endereco;
 
-  var data = { login: login, password: password, email: email };
+  var data = { login: login, password: password, email: email, endereco: endereco };
   _models.User.findOne({
     where: { login: req.params.login }
   }).then(function (user) {
@@ -185,36 +187,30 @@ router.route('/itens').get(function (req, res) {
   });
 });
 
-router.route('/item/:id').get(function (req, res) {
-  _models.Item.findById(req.params.id).then(function (item) {
+router.route('/itens/:item_id').get(function (req, res) {
+  _models.Item.findById(req.params.item_id).then(function (item) {
     if (item) {
       res.json(item);
     } else {
       res.json({ error: 'Request not found' });
     }
   });
-});
-
-router.route('/item/:id').put(function (req, res) {
+}).put(function (req, res) {
   var descricao = req.body.descricao;
   var preco = req.body.preco;
   var fim = { descricao: descricao, preco: preco };
 
-  _models.Item.findOne({
-    where: { id: req.params.id }
-  }).then(function (item) {
+  _models.Item.findById(req.params.item_id).then(function (item) {
     if (item) {
-      _models.Item.update(fim, { where: { id: req.params.id } }).then(function () {
+      _models.Item.update(fim, { where: { id: req.params.item_id } }).then(function () {
         res.json({ sucess: 'Request Updated!' });
       });
     } else {
       res.json({ error: 'Request not found!' });
     }
   });
-});
-
-router.route('/item/:id').delete(function (req, res) {
-  _models.Item.findById(req.params.id).then(function (item) {
+}).delete(function (req, res) {
+  _models.Item.findById(req.params.item_id).then(function (item) {
     if (item) {
       item.destroy().then(function (item) {
         res.json(item);
@@ -245,17 +241,15 @@ router.route('/pedidos').get(function (req, res) {
   });
 });
 
-router.route('/pedidos/:id').get(function (req, res) {
-  _models.Pedido.findById(req.params.id).then(function (pedido) {
+router.route('/pedidos/:pedidos_id').get(function (req, res) {
+  _models.Pedido.findById(req.params.pedidos_id).then(function (pedido) {
     if (pedido) {
       res.json(pedido);
     } else {
       res.json({ error: 'Request not found' });
     }
   });
-});
-
-router.route('/pedidos/:id').put(function (req, res) {
+}).put(function (req, res) {
   var prato = req.body.prato;
   var quantPrato = req.body.quantPrato;
   var bebida = req.body.bebida;
@@ -264,21 +258,17 @@ router.route('/pedidos/:id').put(function (req, res) {
   var quantSobremesa = req.body.quantSobremesa;
   var fim = { prato: prato, quantPrato: quantPrato, bebida: bebida, quantBebida: quantBebida, sobremesa: sobremesa, quantSobremesa: quantSobremesa };
 
-  _models.Pedido.findOne({
-    where: { id: req.params.id }
-  }).then(function (pedido) {
+  _models.Pedido.findById(req.params.pedidos_id).then(function (pedido) {
     if (pedido) {
-      _models.Pedido.update(fim, { where: { id: req.params.id } }).then(function () {
+      _models.Pedido.update(fim, { where: { id: req.params.pedidos_id } }).then(function () {
         res.json({ sucess: 'Request Updated!' });
       });
     } else {
       res.json({ error: 'Request not found!' });
     }
   });
-});
-
-router.route('/pedidos/:id').delete(function (req, res) {
-  _models.Pedido.findById(req.params.id).then(function (pedido) {
+}).delete(function (req, res) {
+  _models.Pedido.findById(req.params.pedidos_id).then(function (pedido) {
     if (pedido) {
       pedido.destroy().then(function (pedido) {
         res.json(pedido);
