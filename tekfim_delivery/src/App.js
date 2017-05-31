@@ -3,7 +3,7 @@ import logo from './img/logo.png';
 import './css/App.css';
 import './App.js';
 import './css/bootstrap.css';
-import Link from 'react-router-dom';
+
 import Navigation from './Navigation.js';
 
 class App extends Component {

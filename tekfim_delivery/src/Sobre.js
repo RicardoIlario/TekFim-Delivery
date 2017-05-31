@@ -3,7 +3,7 @@ import pessoal from './img/pessoal.jpg';
 import './css/App.css';
 import './App.js';
 import './css/bootstrap.css';
-import Link from 'react-router-dom';
+
 import Navigation from './Navigation.js';
 
 class Sobre extends Component {
