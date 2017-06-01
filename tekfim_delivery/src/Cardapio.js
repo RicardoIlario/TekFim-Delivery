@@ -33,7 +33,6 @@ class Itens extends Component {
                                         <br/>
                                         <br/> 
                                         <button className="btn btn-success" type="submit">Pedir Prato</button>
-                                        <a href="#"><button className="btn btn-success" type="submit" >Editar Prato</button></a>
                                     </td>
                                 </tbody>
 
@@ -43,7 +42,6 @@ class Itens extends Component {
                                         <br/>
                                         <br/> 
                                         <button className="btn btn-success" type="submit">Pedir Prato</button>
-                                        <button className="btn btn-success" type="submit">Editar Prato</button>
                                     </td>
                                  </tbody>
                             </table>
