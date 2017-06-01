@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Itens from './Itens';
 import ItensDetails from './ItensDetails';
 import App from './App';
+import Cardapio from './Cardapio'
 import Sobre from './Sobre';
 import CadastrarItem from './CadastrarItem';
 import {BrowserRouter, Route} from 'react-router-dom';
@@ -16,6 +17,7 @@ ReactDOM.render(
       <Route path="/index" component={App} />
       <Route path="/sobre" component={Sobre} />
       <Route path="/cadastrarItem" component={CadastrarItem} />
+      <Route path="/cardapio" component={Cardapio} />
     </div>
   </BrowserRouter>,
   document.getElementById('root')

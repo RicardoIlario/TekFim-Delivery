@@ -16,6 +16,7 @@ class Navigation extends Component {
                     
                     <ul className="nav navbar-nav">
                         <li className="active"><a href="/index">Home</a></li>
+                        <li className="active"><a href="/cardapio">Cardapio</a></li> 
                         <li className="active"><a href="/itens">Itens</a></li>
                         <li className="active"><a href="/cadastraritem">Cadastrar Item</a></li>
                         <li className="active"><a href="/sobre">Sobre</a></li>
