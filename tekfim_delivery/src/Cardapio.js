@@ -16,7 +16,7 @@ class Itens extends Component {
                     <div className="col-xs-12">
                         <Navigation/>
                         <h1>Cardápio da Semana</h1>
-                        
+                        <a href="/montarpedido"><button className="btn btn-success" type="submit">Montar Pedido</button></a>
                         <div className="tabela">
                              <table className="table">
                                  <thead>

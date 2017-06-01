@@ -17,14 +17,14 @@ class Navigation extends Component {
                     <ul className="nav navbar-nav">
                         <li className="active"><a href="/index">Home</a></li>
                         <li className="active"><a href="/cardapio">Cardapio</a></li> 
-                        <li className="active"><a href="/montarpedido">Montar Pedido</a></li>
+
                         <li className="active"><a href="/itens">Itens</a></li>
                         <li className="active"><a href="/cadastraritem">Cadastrar Item</a></li>
                         <li className="active"><a href="/sobre">Sobre</a></li>
                     </ul>
                     
                     <ul className="nav navbar-nav navbar-right">
-                         <li><a href="#"><span className="glyphicon glyphicon-user"></span> Cadastrar</a></li>
+                         <li><a href="/cadastrarusuario"><span className="glyphicon glyphicon-user"></span> Cadastrar</a></li>
                         <li><a href="#"><span className="glyphicon glyphicon-log-in"></span> Login</a></li>
                     </ul>
                 </nav>
